@@ -1,0 +1,152 @@
+Active mode: Rubiks
+Framework: Always use Material UI (MUI) components + system props.
+#______________________COLOURS AND TOKENS
+- Primary (rubiks-blue): main #166CB8; dark #005AE6; light #4180CB; contrast-text #FFFFFF; inverse-text #121212
+- Neutral (blue-grey): text.primary #263238; text.secondary #546E7A; text.disabled #263238 @38%
+- Success: #4CAF50 (600 #43A047, 700 #388E3C)
+- Error: #F44336 (600 #E53935, 700 #D32F2F)
+- Warning: #FF9800 (600 #FB8C00, 700 #F57C00)
+- Backgrounds: default #F9F9F9; surface/paper #FFFFFF
+- Text state overlays: hover 4%; selected 8%; focus 12%; focus-visible 30% (base #000000)
+- Primary state overlays (use #166CB8): hover 4%; selected 8%; focus 12%; focus-visible 30%; outlined-border 50%
+- Action colors: active #263238 @56%; hover = primary/hover; selected = primary/selected; focus = primary/focus; disabled #263238 @38%; disabled-background #263238 @12%
+- Facility picker: enabled light-green/100; hover /200; focus /300; contrast — top-bar text uses text.primary; picker text/icon light-green/900; arrow action.active
+#______________________TYPOGRAPHY______________________
+Typography Tokens
+    • Font sizes: 100=10, 200=12, 300=13, 400=14, 500=15, 600=16, 700=20, 800=24, 900=34, 1000=48, 1100=60, 1200=64, 1300=96
+    • Weights: light=300, regular=400, medium=500, semibold=600
+Typography Roles
+    • h1: size 1300; weight light
+    • h2: size 1100; weight light
+    • h3: size 1000; weight regular
+    • h4: size 900; weight semibold
+    • h5: size 800; weight regular
+    • h6: size 700; weight medium
+    • body1: size 500; weight regular
+    • body2: size 400; weight regular
+    • body1-bold: size 600; weight semibold
+    • subtitle1: size 600; weight regular
+    • subtitle2: size 400; weight medium
+    • overline: size 200; weight regular
+    • caption: size 200; weight regular
+Component Text (from your tokens)
+    • alert/title: size 600; weight medium
+    • alert/description: size 400; weight medium
+    • avatar/initials-lg: size 700; weight regular
+    • avatar/initials-md: size 400; weight regular
+    • avatar/initials-sm: size 200; weight regular
+    • badge/label: size 200; weight regular
+    • badge/label-medium: size 600; weight regular
+    • bottom-navigation/active-label: size 200; weight regular
+    • button/large: size 500; weight medium
+    • button/medium: size 400; weight medium
+    • button/small: size 300; weight medium
+    • chip/small: size 300; weight regular
+    • chip/medium: size 400; weight regular
+    • date-picker/current-month: size 700; weight medium
+    • input/label: size 200; weight regular
+    • input/value: size 600; weight regular
+    • input/helper: size 200; weight regular
+    • list/subheader: size 400; weight regular
+    • menu/header-active: size 500; weight medium
+    • menu/item-default: size 400; weight regular
+    • menu/item-active: size 400; weight medium
+    • menu/item-dense: size 400; weight regular
+    • table/header: size 400; weight medium
+    • tooltip/label: size 100; weight medium
+    • data-grid/aggregation-column-header-label: size 200; weight regular
+    • library/heading: size 1200; weight regular (adjust if you prefer light)
+#______________________BORDER RADIUS AND SPACING SCALE______________________
+Border Radius
+    • radius-0 = 0
+    • radius-0.5 = 2
+    • radius-1 = 4
+    • radius-2 = 8
+    • radius-4 = 16
+    • radius-8 = 32
+Spacing Scale
+    • 0.25 = 2
+    • 0.5 = 4
+    • 0.75 = 6
+    • 1 = 8
+    • 2 = 16
+    • 3 = 24
+    • 4 = 32
+    • 5 = 40
+    • 6 = 48
+    • 7 = 56
+    • 8 = 64
+    • 9 = 72
+    • 10 = 80
+    • 11 = 88
+    • 12 = 96
+#______________________INPUTS______________________
+Inputs (TextField, Select, Autocomplete, Date/Time)
+    • Default: size = small, variant = outlined.
+    • Height: ≈ 5u (40px).
+    • Shape: radius-2 (8px).
+    • Outline: 1px, neutral/200 (#B0BEC5).
+    • Label: subtitle2 (size 400, weight medium); color text.secondary.
+    • [added] Label behavior: use MUI floating label; no custom margins/transforms.
+    • [added] Shrink rules: if a placeholder is present → force shrink = true; otherwise shrink = auto (default).
+    • Value text: input/value (size 600, weight regular); color text.primary.
+    • Helper/Hint: input/helper (size 200, weight regular); color text.secondary.
+    • [added] Helper/Counter row: sits below the outline with 4px top gap; put character counters here (never inside the field).
+    • Placeholder: text.secondary.
+    • Padding: X 2u (16px), Y 1.5u (12px).
+    • Focus: outline = primary.main; focus ring = primary overlay 12%; label color = primary.main.
+    • Hover: outline neutral/300 (#90A4AE).
+    • Disabled: text = text.disabled (#263238 @38%); bg = action.disabled-background (#263238 @12%).
+    • [added] Disabled/Focused/Errored states must not move the label position.
+    • Invalid/Error: outline + helper text = error.main (#F44336).
+    • Success (validated): outline = success.main (#4CAF50).
+    • Select/Autocomplete menus: use menu/item-* typography; hover = primary overlay 4%; active = overlay 8% + text primary.main.
+    • Chips (multiple select): chip small/medium tokens; hover 4%; selected 8%.
+    • Date/Time picker: current-month = token size 700, weight medium; focus ring 12%.
+#______________________DATA GRID______________________
+Data Grid (MUI X Data Grid)
+    • Container: no elevation, 1px outline neutral/200; radius-2 (8px).
+    • Header row: bg = surface/paper; text = table/header (size 400, weight medium); divider neutral/200 @ 60%.
+    • Row height: 48px.
+    • Hover row = primary overlay 4%; selected row = overlay 8% + text primary.main.
+    • Focus ring = primary overlay 12%; focus-visible 30%.
+    • Cells: body2 (14/regular), color text.primary.
+    • Toolbar: search, column chooser, filter, density toggle, export. Icons follow nav rules.
+    • Pagination: 10/25/50.
+    • Empty = centered body2 text.secondary; error = alert tokens.
+#______________________CARDS / WIDGETS______________________
+Cards / Widgets
+    • Surface: surface/paper.
+    • Shape: radius-2 (8px).
+    • Border: 1px neutral/200; no shadow.
+    • Padding: 3u (24px). Equal height in grids.
+    • Header: h6 (size 700, weight medium); optional subtitle subtitle2.
+    • Header actions: right-aligned icons; hover 4%, focus 30%, disabled text.disabled.
+    • Hover (card): primary overlay 4%.
+    • Selected (card): overlay 8%.
+    • Dividers: neutral/200 @ 60% only if needed.
+    • Empty/loading: skeleton neutral/200; empty = body2 text.secondary.
+    • Inline banners: use success/warning/error tokens with correct contrast.
+#______________________PRIMARY BUTTON______________________
+Primary Button
+    • Default: size = small, variant = contained, color = primary.
+    • Height: 5u (40px).
+    • Padding: X 2u (16px).
+    • Shape: radius-2 (8px).
+    • Font: button/medium (size 400, weight medium).
+    • Background: primary.main (#166CB8).
+    • Label color: primary.contrast-text (#FFFFFF).
+    • Hover: background = primary.dark (#005AE6).
+    • Focus: ring = primary focus overlay 12%; focus-visible 30%.
+    • Active: background = primary.dark (#005AE6), overlay 8%.
+    • Disabled: background = neutral/200 (#B0BEC5) @ 38%; label = text.disabled.
+    • Start/End icon spacing: 8px from label. Icon size 20.
+Variants (for consistency)
+    • Outlined: border 1px primary.main; text color = primary.main; hover background = primary hover overlay 4%.
+    • Text: no border, transparent background; text color = primary.main; hover = overlay 4%.
+#______________________ICONS______________________
+    • Library: @mui/icons-material (Rounded set).
+    • Default size: 24px (nav, inputs, grid, cards).
+    • Color tokens: default text.secondary → active primary.main → disabled text.disabled.
+    • Fallback: if a specific icon isn’t in @mui/icons-material, use Material Symbols Rounded (font) with the same size/colors.
+    
