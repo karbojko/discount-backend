@@ -1,0 +1,9 @@
+{
+  "name": "discount-campaigns-api",
+  "version": "1.0.0",
+  "description": "API for Discount Campaigns",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
