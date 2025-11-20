@@ -18,6 +18,19 @@ export default async function handler(req, res) {
     if (method === "GET") {
       const blobs = await list({ prefix: "campaigns/" });
 
+      // DEBUG: jeśli parametr ?debug=true, zwróć strukturę blobów
+      if (req.query.debug === "true") {
+        return res.status(200).json({
+          totalBlobs: blobs.blobs.length,
+          blobs: blobs.blobs.map(b => ({
+            pathname: b.pathname,
+            url: b.url,
+            uploadedAt: b.uploadedAt,
+            extractedId: b.pathname.split('/').pop().replace('.json', '')
+          }))
+        });
+      }
+
       const campaigns = await Promise.all(
         blobs.blobs.map(async (file) => {
           const response = await fetch(file.url);
