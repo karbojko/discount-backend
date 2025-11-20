@@ -62,23 +62,41 @@ export default async function handler(req, res) {
 
     // DELETE — usuwa kampanię
     if (method === "DELETE") {
-      const id = req.query.id;
-      
-      // Pobierz wszystkie blobs i znajdź odpowiedni po ID
-      const allBlobs = await list({ prefix: "campaigns/" });
-      const blobToDelete = allBlobs.blobs.find(blob => {
-        const blobId = blob.pathname.split('/').pop().replace('.json', '');
-        return blobId === id;
-      });
-      
-      if (!blobToDelete) {
-        return res.status(404).json({ message: "Not found" });
+      const { id } = req.query;
+
+      if (!id) {
+        return res.status(400).json({ message: "Missing ID" });
       }
 
-      // Usuń blob używając jego URL
-      await del(blobToDelete.url);
+      try {
+        // Pobierz wszystkie blob'y w folderze campaigns
+        const allBlobs = await list({ prefix: "campaigns/" });
 
-      return res.status(200).json({ message: "Deleted" });
+        // Znajdź blob powiązany z ID
+        const blobToDelete = allBlobs.blobs.find((blob) => {
+          const fileName = blob.pathname.split("/").pop(); // np. 123.json
+          const extractedId = fileName.replace(".json", "");
+          return extractedId === id;
+        });
+
+        if (!blobToDelete) {
+          return res.status(404).json({ message: "Not found" });
+        }
+
+        // Usuń blob po pełnym URL
+        await del(blobToDelete.url);
+
+        return res.status(200).json({
+          message: "Deleted",
+          deletedId: id,
+          blob: blobToDelete,
+        });
+      } catch (error) {
+        return res.status(500).json({
+          message: "Error deleting blob",
+          error: error.message,
+        });
+      }
     }
 
     res.status(405).json({ message: "Method not allowed" });
