@@ -292,14 +292,107 @@
       "moduleDiscounts": []
     },
     {
-      "id": "5dfa",
+      "id": "75c7",
       "name": "test",
+      "status": "Active",
+      "facilitiesCount": 1,
+      "discountPeriod": "21.11.2025 - Ongoing",
+      "combinationWithVouchers": true,
+      "description": "",
+      "membershipDiscounts": [
+        {
+          "id": "m1763625454645",
+          "membershipOffer": "All",
+          "terms": "All",
+          "paymentFrequency": "All",
+          "discountType": "percentage",
+          "value": 40
+        }
+      ],
+      "flatFeeDiscounts": [],
+      "moduleDiscounts": []
+    },
+    {
+      "id": "fe91",
+      "name": "incognito promo",
       "status": "Active",
       "facilitiesCount": 1,
       "discountPeriod": "20.11.2025 - Ongoing",
       "combinationWithVouchers": true,
       "description": "",
-      "membershipDiscounts": [],
+      "membershipDiscounts": [
+        {
+          "id": "m1763626094459",
+          "membershipOffer": "Standard",
+          "terms": "All",
+          "paymentFrequency": "All",
+          "discountType": "percentage",
+          "value": 90
+        }
+      ],
+      "flatFeeDiscounts": [],
+      "moduleDiscounts": []
+    },
+    {
+      "id": "806f",
+      "name": "incognito promo",
+      "status": "Active",
+      "facilitiesCount": 1,
+      "discountPeriod": "20.11.2025 - Ongoing",
+      "combinationWithVouchers": true,
+      "description": "",
+      "membershipDiscounts": [
+        {
+          "id": "m1763626094459",
+          "membershipOffer": "Standard",
+          "terms": "All",
+          "paymentFrequency": "All",
+          "discountType": "percentage",
+          "value": 90
+        }
+      ],
+      "flatFeeDiscounts": [],
+      "moduleDiscounts": []
+    },
+    {
+      "id": "76fc",
+      "name": "yesy",
+      "status": "Active",
+      "facilitiesCount": 1,
+      "discountPeriod": "30.10.2025 - Ongoing",
+      "combinationWithVouchers": true,
+      "description": "tets",
+      "membershipDiscounts": [
+        {
+          "id": "m1763563764207",
+          "membershipOffer": "All",
+          "terms": "All",
+          "paymentFrequency": "All",
+          "discountType": "percentage",
+          "value": 20
+        }
+      ],
+      "flatFeeDiscounts": [],
+      "moduleDiscounts": []
+    },
+    {
+      "id": "fa75",
+      "name": "test",
+      "status": "Active",
+      "facilitiesCount": 1,
+      "discountPeriod": "21.11.2025 - Ongoing",
+      "combinationWithVouchers": true,
+      "description": "",
+      "membershipDiscounts": [
+        {
+          "id": "m1763625454645",
+          "membershipOffer": "All",
+          "terms": "All",
+          "paymentFrequency": "All",
+          "discountType": "percentage",
+          "value": 40
+        }
+      ],
       "flatFeeDiscounts": [],
       "moduleDiscounts": []
     }
