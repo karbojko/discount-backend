@@ -59,7 +59,7 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
   // Campaign Period
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [isPermanent, setIsPermanent] = useState(false);
+  const [isAlwaysActive, setIsAlwaysActive] = useState(false);
 
   // Voucher Logic - Stacking Rules
   const [voucherStackingLogic, setVoucherStackingLogic] = useState('allow_additionally');
@@ -102,15 +102,15 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
   };
 
   const handleSave = async () => {
-    // Validate required fields
-    if (!internalName.trim() || !publicName.trim() || !startDate) {
+    // Validate required fields (skip date validation if always active)
+    if (!internalName.trim() || !publicName.trim() || (!isAlwaysActive && !startDate)) {
       setActiveTab(0); // Switch to Basic Info tab
-      alert('Please fill in all required fields: Internal name, Public name, and Start date');
+      alert(!isAlwaysActive ? 'Please fill in all required fields: Internal name, Public name, and Start date' : 'Please fill in all required fields: Internal name and Public name');
       return;
     }
     
-    // Validate end date is not before start date (skip if permanent)
-    if (!isPermanent && endDate && new Date(endDate) < new Date(startDate)) {
+    // Validate end date is not before start date (skip if always active)
+    if (!isAlwaysActive && endDate && startDate && new Date(endDate) < new Date(startDate)) {
       setActiveTab(0);
       alert('End date must not be earlier than start date');
       return;
@@ -124,10 +124,10 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
         name: publicName,
         status: 'Active',
         facilitiesCount: 1, // This would be calculated based on facilities selected
-        startDate: startDate,
-        endDate: isPermanent ? null : (endDate || null),
-        isPermanent: isPermanent,
-        discountPeriod: endDate ? `${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}` : `${new Date(startDate).toLocaleDateString('de-DE')} - Ongoing`,
+        startDate: isAlwaysActive ? null : startDate,
+        endDate: isAlwaysActive ? null : (endDate || null),
+        isAlwaysActive: isAlwaysActive,
+        discountPeriod: isAlwaysActive ? 'Always Active' : (endDate ? `${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}` : `${new Date(startDate).toLocaleDateString('de-DE')} - Ongoing`),
         combinationWithVouchers: voucherStackingLogic === 'allow_additionally',
         description: publicDescription || '',
         membershipDiscounts: membershipDiscounts.map(d => ({
@@ -427,12 +427,13 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
     setModuleDiscounts(moduleDiscounts.filter((d) => d.id !== id));
   };
 
-  // Clear end date when permanent campaign is enabled
+  // Clear both dates when always active campaign is enabled
   useEffect(() => {
-    if (isPermanent) {
+    if (isAlwaysActive) {
+      setStartDate('');
       setEndDate('');
     }
-  }, [isPermanent]);
+  }, [isAlwaysActive]);
 
   const renderBasicInfo = () => (
     <Box>
@@ -497,16 +498,21 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
         Campaign period
       </Typography>
       
-      <FormControlLabel
-        control={
-          <Switch
-            checked={isPermanent}
-            onChange={(e) => setIsPermanent(e.target.checked)}
-          />
-        }
-        label="This campaign does not expire"
-        sx={{ mb: 2 }}
-      />
+      <Box sx={{ mb: 3 }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isAlwaysActive}
+              onChange={(e) => setIsAlwaysActive(e.target.checked)}
+            />
+          }
+          label="Always active"
+          sx={{ mb: 0.5 }}
+        />
+        <FormHelperText sx={{ mt: 0.5, ml: 0 }}>
+          This campaign has no start or end date when enabled.
+        </FormHelperText>
+      </Box>
       
       <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
         <TextField
@@ -515,7 +521,8 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
           InputLabelProps={{ shrink: true }}
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          required
+          disabled={isAlwaysActive}
+          required={!isAlwaysActive}
           sx={{ flex: 1 }}
         />
         <TextField
@@ -524,11 +531,11 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
           InputLabelProps={{ shrink: true }}
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          disabled={isPermanent}
+          disabled={isAlwaysActive}
           sx={{ flex: 1 }}
           inputProps={{ min: startDate }}
-          error={endDate && startDate && new Date(endDate) < new Date(startDate)}
-          helperText={endDate && startDate && new Date(endDate) < new Date(startDate) ? 'End date must not be earlier than start date' : ''}
+          error={!isAlwaysActive && endDate && startDate && new Date(endDate) < new Date(startDate)}
+          helperText={!isAlwaysActive && endDate && startDate && new Date(endDate) < new Date(startDate) ? 'End date must not be earlier than start date' : ''}
         />
       </Box>
 
