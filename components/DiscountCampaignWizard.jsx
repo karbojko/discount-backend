@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDiscountCampaigns } from '../src/context/DiscountCampaignContext';
 import {
@@ -59,6 +59,7 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
   // Campaign Period
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [isPermanent, setIsPermanent] = useState(false);
 
   // Voucher Logic - Stacking Rules
   const [voucherStackingLogic, setVoucherStackingLogic] = useState('allow_additionally');
@@ -108,8 +109,8 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
       return;
     }
     
-    // Validate end date is not before start date
-    if (endDate && new Date(endDate) < new Date(startDate)) {
+    // Validate end date is not before start date (skip if permanent)
+    if (!isPermanent && endDate && new Date(endDate) < new Date(startDate)) {
       setActiveTab(0);
       alert('End date must not be earlier than start date');
       return;
@@ -123,6 +124,9 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
         name: publicName,
         status: 'Active',
         facilitiesCount: 1, // This would be calculated based on facilities selected
+        startDate: startDate,
+        endDate: isPermanent ? null : (endDate || null),
+        isPermanent: isPermanent,
         discountPeriod: endDate ? `${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}` : `${new Date(startDate).toLocaleDateString('de-DE')} - Ongoing`,
         combinationWithVouchers: voucherStackingLogic === 'allow_additionally',
         description: publicDescription || '',
@@ -423,6 +427,13 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
     setModuleDiscounts(moduleDiscounts.filter((d) => d.id !== id));
   };
 
+  // Clear end date when permanent campaign is enabled
+  useEffect(() => {
+    if (isPermanent) {
+      setEndDate('');
+    }
+  }, [isPermanent]);
+
   const renderBasicInfo = () => (
     <Box>
       {/* Basic Information Section */}
@@ -486,6 +497,17 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
         Campaign period
       </Typography>
       
+      <FormControlLabel
+        control={
+          <Switch
+            checked={isPermanent}
+            onChange={(e) => setIsPermanent(e.target.checked)}
+          />
+        }
+        label="This campaign does not expire"
+        sx={{ mb: 2 }}
+      />
+      
       <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
         <TextField
           label="Start date"
@@ -502,6 +524,7 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
           InputLabelProps={{ shrink: true }}
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
+          disabled={isPermanent}
           sx={{ flex: 1 }}
           inputProps={{ min: startDate }}
           error={endDate && startDate && new Date(endDate) < new Date(startDate)}
