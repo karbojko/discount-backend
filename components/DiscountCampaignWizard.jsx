@@ -539,62 +539,92 @@ export default function DiscountCampaignWizard({ open, onCancel, onComplete }) {
         />
       </Box>
 
-      {/* Voucher Logic - Stacking Rules Section */}
+      {/* Voucher Logic Section */}
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
-        Voucher logic – stacking rules
+        Voucher logic
       </Typography>
       
-      <FormControl component="fieldset" sx={{ mb: 4 }}>
+      <FormControl component="fieldset" sx={{ mb: voucherStackingLogic === 'allow_additionally' ? 3 : 4 }}>
         <FormLabel component="legend" sx={{ mb: 1, fontSize: 14, fontWeight: 500, color: 'text.primary' }}>
-          Voucher logic
+          Voucher behavior
         </FormLabel>
         <RadioGroup
           value={voucherStackingLogic}
-          onChange={(e) => setVoucherStackingLogic(e.target.value)}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setVoucherStackingLogic(newValue);
+            // Reset priority when not "Allow vouchers"
+            if (newValue !== 'allow_additionally') {
+              setVoucherPriority('vouchers_first');
+            }
+          }}
         >
-          <FormControlLabel
-            value="allow_additionally"
-            control={<Radio />}
-            label={<Typography variant="body2">Allow vouchers additionally</Typography>}
-          />
-          <FormControlLabel
-            value="replace_discount"
-            control={<Radio />}
-            label={<Typography variant="body2">Vouchers replace inherent discount</Typography>}
-          />
-          <FormControlLabel
-            value="disallow"
-            control={<Radio />}
-            label={<Typography variant="body2">Disallow vouchers</Typography>}
-          />
+          <Box>
+            <FormControlLabel
+              value="allow_additionally"
+              control={<Radio />}
+              label={<Typography variant="body2">Allow vouchers</Typography>}
+            />
+            <FormHelperText sx={{ ml: 4, mt: -0.5, mb: 1.5 }}>
+              Vouchers can be applied together with this discount.
+            </FormHelperText>
+          </Box>
+          <Box>
+            <FormControlLabel
+              value="replace_discount"
+              control={<Radio />}
+              label={<Typography variant="body2">Vouchers replace inherent discount</Typography>}
+            />
+            <FormHelperText sx={{ ml: 4, mt: -0.5, mb: 1.5 }}>
+              When a voucher is applied, it replaces the campaign discount.
+            </FormHelperText>
+          </Box>
+          <Box>
+            <FormControlLabel
+              value="disallow"
+              control={<Radio />}
+              label={<Typography variant="body2">Disallow vouchers</Typography>}
+            />
+            <FormHelperText sx={{ ml: 4, mt: -0.5, mb: 1.5 }}>
+              Vouchers cannot be used with this discount.
+            </FormHelperText>
+          </Box>
         </RadioGroup>
       </FormControl>
 
-      {/* Voucher Logic - Priority Section */}
-      <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
-        Voucher logic – priority
-      </Typography>
-      
-      <FormControl component="fieldset" sx={{ mb: 4 }}>
-        <FormLabel component="legend" sx={{ mb: 1, fontSize: 14, fontWeight: 500, color: 'text.primary' }}>
-          Voucher type priority
-        </FormLabel>
-        <RadioGroup
-          value={voucherPriority}
-          onChange={(e) => setVoucherPriority(e.target.value)}
-        >
-          <FormControlLabel
-            value="vouchers_first"
-            control={<Radio />}
-            label={<Typography variant="body2">Vouchers first</Typography>}
-          />
-          <FormControlLabel
-            value="discounts_first"
-            control={<Radio />}
-            label={<Typography variant="body2">Discount campaigns first</Typography>}
-          />
-        </RadioGroup>
-      </FormControl>
+      {/* Priority - Only shown when "Allow vouchers" is selected */}
+      {voucherStackingLogic === 'allow_additionally' && (
+        <FormControl component="fieldset" sx={{ mb: 4 }}>
+          <FormLabel component="legend" sx={{ mb: 1, fontSize: 14, fontWeight: 500, color: 'text.primary' }}>
+            Priority
+          </FormLabel>
+          <RadioGroup
+            value={voucherPriority}
+            onChange={(e) => setVoucherPriority(e.target.value)}
+          >
+            <Box>
+              <FormControlLabel
+                value="discounts_first"
+                control={<Radio />}
+                label={<Typography variant="body2">Campaign discount first</Typography>}
+              />
+              <FormHelperText sx={{ ml: 4, mt: -0.5, mb: 1.5 }}>
+                Apply the campaign discount before voucher discounts.
+              </FormHelperText>
+            </Box>
+            <Box>
+              <FormControlLabel
+                value="vouchers_first"
+                control={<Radio />}
+                label={<Typography variant="body2">Vouchers first</Typography>}
+              />
+              <FormHelperText sx={{ ml: 4, mt: -0.5, mb: 1.5 }}>
+                Apply voucher discounts before the campaign discount.
+              </FormHelperText>
+            </Box>
+          </RadioGroup>
+        </FormControl>
+      )}
 
       {/* Source Section */}
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
